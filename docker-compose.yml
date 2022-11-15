@@ -13,7 +13,7 @@ services:
     ports: 
       - 3001:3001
     environment:
-      - DATABASE_URL=postgresql://ngcash:password@localhost:5432/ngcash?:schema=public
+      - DATABASE_URL=postgresql://ngcash:password@postgres:5432/ngcash?:schema=public
     command: npm run dev
   postgres:
     image: postgres:10.3
@@ -28,7 +28,3 @@ services:
       - '5432:5432'
 volumes:
   postgres:
-
-networks:
-  default:
-    name: ng-cash
