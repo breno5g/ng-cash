@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  backend:
+    image: node:16.15
+    container_name: ng-cash-backend
+    build: ./
+    tty: true
+    working_dir: /app
+    volumes: 
+      - ./:/app
+    depends_on:
+      - postgres
+    ports: 
+      - 3001:3001
+    environment:
+      - DATABASE_URL=postgresql://ngcash:ngcash@localhost:5432/ngcash?:schema=public
+    command: npm run dev
+  postgres:
+    image: postgres:10.3
+    restart: always
+    container_name: ng-cash-database
+    environment:
+      - POSTGRES_USER=teste
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+volumes:
+  postgres:
+
+networks:
+  default:
+    name: ng-cash
