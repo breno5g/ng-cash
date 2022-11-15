@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --exit-child --watch src src/index.ts",
-    "logs": "docker-compose logs -f ng-cash-backend",
+    "logs": "docker-compose logs -f backend",
     "test": "vitest"
   },
   "keywords": [],

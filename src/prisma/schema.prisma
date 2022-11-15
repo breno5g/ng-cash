@@ -15,7 +15,7 @@ model User {
   username  String   @unique
   password  String
   accountId Int
-  account   Account? @relation(fields: [accountId], references: [id])
+  account   Account @relation(fields: [accountId], references: [id])
 }
 
 model Account {
@@ -32,6 +32,6 @@ model Transaction {
   creditedAccountId Int
   value             Float
   createdAt         DateTime
-  debitedAccount    Account? @relation(name: "debitedAccount", fields: [debitedAccountId], references: [id])
-  creditedAccount   Account? @relation(name: "creditedAccount", fields: [creditedAccountId], references: [id])
+  debitedAccount    Account @relation(name: "debitedAccount", fields: [debitedAccountId], references: [id])
+  creditedAccount   Account @relation(name: "creditedAccount", fields: [creditedAccountId], references: [id])
 }
