@@ -33,14 +33,10 @@ class UserModel implements IUserModel {
   }
 
   public async findOneByUsername (username: string): Promise<IUser | null> {
-    try {
-      const user = await this.prisma.user.findUnique({
-        where: { username }
-      });
-      return user as IUser;
-    } catch (error: any) {
-      throw new InternalServerError();
-    }
+    const user = await this.prisma.user.findUnique({
+      where: { username }
+    });
+    return user as IUser;
   };
 }
 
