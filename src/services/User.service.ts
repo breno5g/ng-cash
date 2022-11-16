@@ -1,4 +1,4 @@
-import { InternalServerError, UnauthoridError, UserAlreadyExistsError, UsernameOrPasswordNotFoundError } from '../errors';
+import { UnauthoridError, UserAlreadyExistsError, UsernameOrPasswordNotFoundError } from '../errors';
 import { Bcrypt } from '../helpers/bcrypt.class';
 import JWT from '../helpers/jwt.class';
 import { IUser, IUserBalance, IUserLogin } from '../interfaces/IUser';
@@ -49,11 +49,11 @@ class UserService implements IUserService {
 
   public async getBalance (username: string, token: string): Promise<IUserBalance | null> {
     const user = await this.model.findOneByUsername(username);
-    const { data: { accountId } } = this.jwt.validateToken(token);
+    const data = this.jwt.validateToken(token)?.data;
 
-    if (user?.accountId !== accountId) throw new UnauthoridError();
+    if (user?.accountId !== data?.accountId) throw new UnauthoridError();
 
-    if (user.account) {
+    if (user?.account) {
       const { balance } = user.account;
       return { balance };
     }

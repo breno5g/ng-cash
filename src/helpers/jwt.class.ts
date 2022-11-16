@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { IJwt, IToken } from '../interfaces/IJwt';
 import 'dotenv/config';
+import { UnauthoridError } from '../errors';
 
 class JWT {
   jwtConfig: any;
@@ -19,10 +20,15 @@ class JWT {
     return token;
   }
 
-  validateToken (token: string): IToken {
-    const { jwtSecret } = this;
-    const result = jwt.decode(token, jwtSecret);
-    return result as IToken;
+  validateToken (token: string): IToken | null {
+    try {
+      const { jwtSecret } = this;
+      const result = jwt.verify(token, jwtSecret);
+
+      return result as IToken;
+    } catch (error) {
+      throw new UnauthoridError();
+    }
   }
 }
 

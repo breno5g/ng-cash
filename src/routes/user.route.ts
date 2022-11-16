@@ -6,6 +6,7 @@ import { UserService } from '../services/User.service';
 import { UserController } from '../controllers/User.controller';
 import bodyValidator from '../middlewares/validateBody.middleware';
 import { userBodySchema } from '../schemas/user';
+import tokenValidator from '../middlewares/tokenValidator.middleware';
 
 const route = Router();
 const controller = new RouteFactorie(UserModel, UserService, UserController).Controller;
@@ -21,6 +22,7 @@ route.post('/create',
 );
 
 route.get('/balance',
+  (req, res, next) => tokenValidator(req, res, next),
   (req, res, next) => controller.getBalance(req, res, next)
 );
 
