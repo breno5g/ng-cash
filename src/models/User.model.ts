@@ -1,19 +1,22 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { InternalServerError, UserAlreadyExistsError } from '../errors';
-import { IUser } from '../interfaces/IUser';
+import { Bcrypt } from '../helpers/bcrypt.class';
+import { IUser, IUserLogin } from '../interfaces/IUser';
 import IUserModel from '../interfaces/IUserModel';
 
 class UserModel implements IUserModel {
   private readonly prisma: PrismaClient;
+  private readonly bcrypt: Bcrypt = new Bcrypt();
   constructor (prisma: PrismaClient) {
     this.prisma = prisma;
   }
 
   public async create (obj: IUser): Promise<string | null> {
     try {
+      const hashedPassword = await this.bcrypt.generatePassword(obj.password);
       await this.prisma.user.create({
         data: {
-          password: obj.password,
+          password: hashedPassword,
           username: obj.username,
           account: {
             create: {
