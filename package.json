@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --exit-child --watch src src/index.ts",
     "logs": "docker-compose logs -f backend",
-    "test": "vitest"
+    "test": "vitest",
+    "test:staged": "vitest run",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +36,8 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.5.1",
     "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
     "prisma": "^4.6.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.3",
