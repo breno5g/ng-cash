@@ -1,7 +1,7 @@
-import { UserAlreadyExistsError, UsernameOrPasswordNotFoundError } from '../errors';
+import { InternalServerError, UnauthoridError, UserAlreadyExistsError, UsernameOrPasswordNotFoundError } from '../errors';
 import { Bcrypt } from '../helpers/bcrypt.class';
 import JWT from '../helpers/jwt.class';
-import { IUser, IUserLogin } from '../interfaces/IUser';
+import { IUser, IUserBalance, IUserLogin } from '../interfaces/IUser';
 import IUserModel from '../interfaces/IUserModel';
 import IUserService from '../interfaces/IUserService';
 
@@ -38,20 +38,34 @@ class UserService implements IUserService {
     const isValidPassword = await this.bcrypt.comparePassword(obj.password, user.password);
     if (!isValidPassword) throw new UsernameOrPasswordNotFoundError();
 
-    const { username, account } = user;
-    const token = this.jwt.generateToken({ username });
+    const { username, accountId, account } = user;
+    const token = this.jwt.generateToken({ username, accountId });
 
     return {
       data: { username, account },
       token
     };
   }
+
+  public async getBalance (username: string, token: string): Promise<IUserBalance | null> {
+    const user = await this.model.findOneByUsername(username);
+    const { data: { accountId } } = this.jwt.validateToken(token);
+
+    if (user?.accountId !== accountId) throw new UnauthoridError();
+
+    if (user.account) {
+      const { balance } = user.account;
+      return { balance };
+    }
+
+    throw new InternalServerError();
+  }
 }
 
 // const teste = async (): Promise<any> => {
 //   try {
 //     const db = new UserService(new UserModel(new PrismaClient()));
-//     const handler = await db.login({ username: 'breno6g', password: '@Teste01' });
+//     const handler = await db.getBalance('breno6g', 'yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoiYnJlbm82ZyIsImFjY291bnRJZCI6MTB9LCJpYXQiOjE2Njg2MDUxNTYsImV4cCI6MTY2ODY5MTU1Nn0.AqtQTPwZchTFLEH096uFMJuqVLJaVYkJAi-RevRksXw');
 //     console.log(handler);
 //   } catch (error: any) {
 //     console.log(error.message);

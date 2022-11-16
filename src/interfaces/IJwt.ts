@@ -1,5 +1,10 @@
+import { Jwt } from 'jsonwebtoken';
 import { IUser } from './IUser';
 
-type IJwt = Omit<IUser, 'password' | 'accountId' | 'account'>;
+type IJwt = Omit<IUser, 'password' | 'account'>;
 
-export { IJwt };
+interface IToken extends Jwt {
+  data: { username: string, accountId: number }
+}
+
+export { IJwt, IToken };

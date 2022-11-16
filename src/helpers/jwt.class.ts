@@ -1,5 +1,5 @@
-import jwt, { Jwt } from 'jsonwebtoken';
-import { IJwt } from '../interfaces/IJwt';
+import jwt from 'jsonwebtoken';
+import { IJwt, IToken } from '../interfaces/IJwt';
 import 'dotenv/config';
 
 class JWT {
@@ -19,11 +19,20 @@ class JWT {
     return token;
   }
 
-  validateToken (token: string): Jwt | null {
+  validateToken (token: string): IToken {
     const { jwtSecret } = this;
     const result = jwt.decode(token, jwtSecret);
-    return result;
+    return result as IToken;
   }
 }
+
+// const teste = (): void => {
+//   const token = new JWT().generateToken({ username: 'rod', accountId: 3 });
+//   console.log(token);
+//   const decoded = new JWT().validateToken(token);
+//   console.log(decoded);
+// };
+
+// teste();
 
 export default JWT;

@@ -6,5 +6,8 @@ interface IUser {
 }
 
 interface IUserLogin { token: string, data: Omit<IUser, 'password'> };
+interface IUserBalance {
+  balance: number
+}
 
-export { IUser, IUserLogin };
+export { IUser, IUserLogin, IUserBalance };
