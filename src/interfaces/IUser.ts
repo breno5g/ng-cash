@@ -1,7 +1,11 @@
+import { Jwt } from 'jsonwebtoken';
+
 interface IUser {
   username: string
   password: string
   accountId?: number
 }
 
-export { IUser };
+interface IUserLogin { token: Jwt, data: Omit<IUser, 'password'> };
+
+export { IUser, IUserLogin };
