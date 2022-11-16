@@ -1,8 +1,8 @@
 import { IUser } from './IUser';
 
-interface IUserModel {
+interface IUserService {
   create(obj: IUser): Promise<string | null>
   findOneByUsername(username: string): Promise<IUser | null>
 }
 
-export default IUserModel;
+export default IUserService;
