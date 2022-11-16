@@ -20,4 +20,8 @@ route.post('/create',
   (req, res, next) => controller.create(req, res, next)
 );
 
+route.get('/balance',
+  (req, res, next) => controller.getBalance(req, res, next)
+);
+
 export default route;

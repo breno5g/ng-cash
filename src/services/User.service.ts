@@ -58,7 +58,7 @@ class UserService implements IUserService {
       return { balance };
     }
 
-    throw new InternalServerError();
+    return null;
   }
 }
 
