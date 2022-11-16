@@ -27,12 +27,21 @@ class UserModel implements IUserModel {
     }
   }
 
-  public findOneByUsername: (username: string) => Promise<IUser>;
+  public async findOneByUsername (username: string): Promise<IUser | null> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { username }
+      });
+      return user as IUser;
+    } catch (error) {
+      throw new Error('Erro por definir');
+    }
+  };
 }
 
 // const teste = async (): Promise<any> => {
 //   const db = new UserModel(new PrismaClient());
-//   const handler = await db.create({ username: 'brenog', password: 'password' });
+//   const handler = await db.findOneByUsername('breno5g');
 //   console.log(handler);
 // };
 
