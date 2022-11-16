@@ -38,11 +38,11 @@ class UserService implements IUserService {
     const isValidPassword = await this.bcrypt.comparePassword(obj.password, user.password);
     if (!isValidPassword) throw new UsernameOrPasswordNotFoundError();
 
-    const { username, accountId } = user;
-    const token = this.jwt.generateToken({ username, accountId });
+    const { username, account } = user;
+    const token = this.jwt.generateToken({ username });
 
     return {
-      data: { username, accountId },
+      data: { username, account },
       token
     };
   }
