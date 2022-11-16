@@ -10,6 +10,11 @@ import { userBodySchema } from '../schemas/user';
 const route = Router();
 const controller = new RouteFactorie(UserModel, UserService, UserController).Controller;
 
+route.post('/',
+  (req, res, next) => bodyValidator(userBodySchema, req, res, next),
+  (req, res, next) => controller.login(req, res, next)
+);
+
 route.post('/create',
   (req, res, next) => bodyValidator(userBodySchema, req, res, next),
   (req, res, next) => controller.create(req, res, next)
