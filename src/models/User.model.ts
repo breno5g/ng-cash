@@ -22,12 +22,12 @@ class UserModel implements IUserModel {
           }
         }
       });
+
       return 'ok';
     } catch (error: any) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new UserAlreadyExistsError();
       }
-
       throw new InternalServerError();
     }
   }
@@ -38,7 +38,7 @@ class UserModel implements IUserModel {
         where: { username }
       });
       return user as IUser;
-    } catch (error) {
+    } catch (error: any) {
       throw new InternalServerError();
     }
   };
