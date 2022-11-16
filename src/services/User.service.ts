@@ -1,8 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
+import { InternalServerError, UserAlreadyExistsError } from '../errors';
 import { IUser } from '../interfaces/IUser';
 import IUserModel from '../interfaces/IUserModel';
 import IUserService from '../interfaces/IUserService';
-import UserModel from '../models/User.model';
+// import UserModel from '../models/User.model';
 
 class UserService implements IUserService {
   private readonly model: IUserModel;
@@ -13,7 +14,7 @@ class UserService implements IUserService {
   public async create (obj: IUser): Promise<string | null> {
     try {
       const userAlreadyExists = await this.model.findOneByUsername(obj.username);
-      if (userAlreadyExists != null) throw new Error('User already exists');
+      if (userAlreadyExists != null) throw new UserAlreadyExistsError();
       await this.model.create(obj);
       return 'User created successfuly';
     } catch (error: any) {
@@ -26,7 +27,7 @@ class UserService implements IUserService {
       const user = await this.model.findOneByUsername(username);
       return user;
     } catch (error: any) {
-      throw new Error('Erro por definir');
+      throw new InternalServerError();
     }
   }
 }

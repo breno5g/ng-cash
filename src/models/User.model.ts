@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { InternalServerError, UserAlreadyExistsError } from '../errors';
 import { IUser } from '../interfaces/IUser';
 import IUserModel from '../interfaces/IUserModel';
 
@@ -23,7 +24,11 @@ class UserModel implements IUserModel {
       });
       return 'ok';
     } catch (error: any) {
-      throw new Error('Não foi possivel criar o usuario');
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new UserAlreadyExistsError();
+      }
+
+      throw new InternalServerError();
     }
   }
 
@@ -34,14 +39,14 @@ class UserModel implements IUserModel {
       });
       return user as IUser;
     } catch (error) {
-      throw new Error('Erro por definir');
+      throw new InternalServerError();
     }
   };
 }
 
 // const teste = async (): Promise<any> => {
 //   const db = new UserModel(new PrismaClient());
-//   const handler = await db.findOneByUsername('breno5g');
+//   const handler = await db.create({ username: 'breno6g', password: 'jkldjasl' });
 //   console.log(handler);
 // };
 
