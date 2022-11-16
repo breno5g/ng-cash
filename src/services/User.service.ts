@@ -14,11 +14,11 @@ class UserService implements IUserService {
   public async create (obj: IUser): Promise<string | null> {
     try {
       const userAlreadyExists = await this.model.findOneByUsername(obj.username);
-      if (userAlreadyExists != null) throw new UserAlreadyExistsError();
+      if (userAlreadyExists) throw new UserAlreadyExistsError();
       await this.model.create(obj);
       return 'User created successfuly';
     } catch (error: any) {
-      throw new Error(error.message);
+      throw error;
     }
   }
 

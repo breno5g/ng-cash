@@ -13,7 +13,7 @@ class UserController {
       const { username, password } = req.body as IUser;
       const response = await this.service.create({ username, password });
       return res.status(201).json({ message: response });
-    } catch (error) {
+    } catch (error: any) {
       next(error);
     }
   }
