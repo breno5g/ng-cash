@@ -75,24 +75,45 @@ describe('User service', () => {
     });
 
     describe('Fail Case', () => {
-      beforeEach(() => {
-        vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
-          ...userMock[0]
-        } as unknown as IUser));
+      describe('Incorrect password', () => {
+        beforeEach(() => {
+          vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
+            ...userMock[0]
+          } as unknown as IUser));
+        });
+    
+        afterAll(() => {
+          vitest.clearAllMocks();
+        });
+    
+        it('should throw error with incorrect password', async () => {
+          try {
+            const service = new UserService(new UserModel(new PrismaClient()));
+            await service.login({ username: 'teste', password: 'SenhaErrada' });
+          } catch (error: any) {
+            expect(error.message).toBe("Username or Password not found")
+            expect(error.status).toBe(400)
+          }
+        });
       });
-  
-      afterAll(() => {
-        vitest.clearAllMocks();
-      });
-  
-      it('should throw error with incorrect password', async () => {
-        try {
-          const service = new UserService(new UserModel(new PrismaClient()));
-          await service.login({ username: 'teste', password: 'SenhaErrada' });
-        } catch (error: any) {
-          expect(error.message).toBe("Username or Password not found")
-          expect(error.status).toBe(400)
-        }
+      describe('Incorrect username', () => {
+        beforeEach(() => {
+          vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => null);
+        });
+    
+        afterAll(() => {
+          vitest.clearAllMocks();
+        });
+    
+        it('should throw error with incorrect password', async () => {
+          try {
+            const service = new UserService(new UserModel(new PrismaClient()));
+            await service.login({ username: 'teste', password: 'SenhaErrada' });
+          } catch (error: any) {
+            expect(error.message).toBe("Username or Password not found")
+            expect(error.status).toBe(400)
+          }
+        });
       });
     });
   });
