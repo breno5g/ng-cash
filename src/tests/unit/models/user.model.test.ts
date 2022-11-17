@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { describe, it, expect, beforeEach, vitest, afterAll } from 'vitest';
-import UserModel from '../../models/User.model';
+import UserModel from '../../../models/User.model';
 
 import { prismaMock } from '../mocks/prisma.mock';
 import { userMock } from '../mocks/user';

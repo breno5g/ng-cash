@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import { describe, it, expect, beforeEach, vitest, afterAll } from 'vitest';
-import UserModel from '../../models/User.model';
+import UserModel from '../../../models/User.model';
 
-import { IUser } from '../../interfaces/IUser';
-import { UserService } from '../../services/User.service';
+import { IUser } from '../../../interfaces/IUser';
+import { UserService } from '../../../services/User.service';
 
 import { tokenMock, tokenWithAccountId2Mock, userMock } from "../mocks/user"
-import JWT from '../../helpers/jwt.class';
+import JWT from '../../../helpers/jwt.class';
 
 describe('User service', () => {
   describe('Create user', () => {
