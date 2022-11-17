@@ -86,5 +86,21 @@ describe('User model', () => {
         expect(res?.username).toBe(userMock[0].username);
       });
     });
+
+    describe('Fail case', () => {
+      beforeEach(() => {
+        prismaMock.user.findUnique.mockResolvedValue(null)
+      });
+
+      afterAll(() => {
+        vitest.clearAllMocks();
+      });
+
+      it('should be possible find user', async () => {
+        const model = new UserModel(prismaMock);
+        const res = await model.findOneByUsername('teste');
+        expect(res).toBeNull();
+      });
+    });
   });
 });
