@@ -51,25 +51,49 @@ describe('User service', () => {
     });
   });
   describe('Login', () => {
-    beforeEach(() => {
-      vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
-        ...userMock[0]
-      } as unknown as IUser));
+    describe('Success Case', () => { 
+      beforeEach(() => {
+        vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
+          ...userMock[0]
+        } as unknown as IUser));
+      });
+  
+      afterAll(() => {
+        vitest.clearAllMocks();
+      });
+  
+      it('should be possible login with valid username and password', async () => {
+        const service = new UserService(new UserModel(new PrismaClient()));
+        const res = await service.login({ username: 'teste', password: '@Teste01' });
+        
+        const jwt = new JWT()
+        const token = res?.token
+        
+        expect(res?.data.username).toBe("teste");
+        expect(jwt.validateToken(token || "")).toBeDefined();
+      });
     });
 
-    afterAll(() => {
-      vitest.clearAllMocks();
-    });
-
-    it('should be possible login with valid username and password', async () => {
-      const service = new UserService(new UserModel(new PrismaClient()));
-      const res = await service.login({ username: 'teste', password: '@Teste01' });
-      
-      const jwt = new JWT()
-      const token = res?.token
-      
-      expect(res?.data.username).toBe("teste");
-      expect(jwt.validateToken(token || "")).toBeDefined();
+    describe('Fail Case', () => {
+      beforeEach(() => {
+        vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
+          ...userMock[0]
+        } as unknown as IUser));
+      });
+  
+      afterAll(() => {
+        vitest.clearAllMocks();
+      });
+  
+      it('should throw error with incorrect password', async () => {
+        try {
+          const service = new UserService(new UserModel(new PrismaClient()));
+          await service.login({ username: 'teste', password: 'SenhaErrada' });
+        } catch (error: any) {
+          expect(error.message).toBe("Username or Password not found")
+          expect(error.status).toBe(400)
+        }
+      });
     });
   });
 });
