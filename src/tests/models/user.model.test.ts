@@ -1,8 +1,10 @@
+import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { describe, it, expect, beforeEach, vitest, afterAll } from 'vitest';
 import UserModel from '../../models/User.model';
 
 import { prismaMock } from '../mocks/prisma.mock';
+import { userMock } from '../mocks/user';
 
 describe('User model', () => {
   describe('Create user', () => {
@@ -44,6 +46,7 @@ describe('User model', () => {
           }
         });
       });
+
       describe('Internal server error', () => {
         beforeEach(() => {
           prismaMock.user.create.mockImplementation( () => {
@@ -64,6 +67,23 @@ describe('User model', () => {
             expect(error.status).toBe(500);
           }
         });
+      });
+    });
+  });
+  describe('Find one by username', () => {
+    describe('Success case', () => {
+      beforeEach(() => {
+        prismaMock.user.findUnique.mockResolvedValue(userMock[0] as User)
+      });
+
+      afterAll(() => {
+        vitest.clearAllMocks();
+      });
+
+      it('should be possible find user', async () => {
+        const model = new UserModel(prismaMock);
+        const res = await model.findOneByUsername('teste');
+        expect(res?.username).toBe(userMock[0].username);
       });
     });
   });
