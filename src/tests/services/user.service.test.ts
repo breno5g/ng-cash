@@ -6,7 +6,7 @@ import UserModel from '../../models/User.model';
 import { IUser, IUserLogin } from '../../interfaces/IUser';
 import { UserService } from '../../services/User.service';
 
-import { userMock } from "../mocks/user"
+import { tokenMock, tokenWithAccountId2Mock, userMock } from "../mocks/user"
 import JWT from '../../helpers/jwt.class';
 
 describe('User service', () => {
@@ -114,6 +114,48 @@ describe('User service', () => {
             expect(error.status).toBe(400)
           }
         });
+      });
+    });
+  });
+
+  describe('Get Balance', () => {
+    describe('Success case', () => {
+      beforeEach(() => {
+        vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
+          ...userMock[0]
+        } as unknown as IUser));
+      });
+  
+      afterAll(() => {
+        vitest.clearAllMocks();
+      });
+  
+      it('should be possible get balance ', async () => {
+        const service = new UserService(new UserModel(new PrismaClient()));
+        const res = await service.getBalance('teste', tokenMock );
+        expect(res?.balance).toBe(100)
+      });
+    });
+
+    describe('Fail case', () => {
+      beforeEach(() => {
+        vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
+          ...userMock[0]
+        } as unknown as IUser));
+      });
+  
+      afterAll(() => {
+        vitest.clearAllMocks();
+      });
+  
+      it('should throw error when passed invalid token ', async () => {
+        try {
+          const service = new UserService(new UserModel(new PrismaClient()));
+          await service.getBalance('teste', tokenWithAccountId2Mock );
+        } catch (error: any) {
+          expect(error.message).toBe("Unauthorized")
+          expect(error.status).toBe(401)
+        }
       });
     });
   });

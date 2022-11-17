@@ -53,12 +53,14 @@ class UserService implements IUserService {
 
     if (user?.accountId !== data?.accountId) throw new UnauthoridError();
 
+    let response = {};
+
     if (user?.account) {
       const { balance } = user.account;
-      return { balance };
+      response = { balance };
     }
 
-    return null;
+    return response as IUserBalance;
   }
 }
 
