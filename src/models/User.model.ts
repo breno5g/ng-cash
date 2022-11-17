@@ -23,7 +23,7 @@ class UserModel implements IUserModel {
         }
       });
 
-      return 'ok';
+      return 'User created successfuly';
     } catch (error: any) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new UserAlreadyExistsError();
