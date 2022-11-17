@@ -1,0 +1,222 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "NG.Cash",
+    "description": "Somos o app financeiro da Nova Geração! Uma plataforma tecnológica com tudo o que é necessário para dar início à uma vida financeira responsável e controlada. Nosso propósito é fazer com que a GenZ se torne a geração mais independente com relação ao seu dinheiro, estando preparada para enfrentar todo e qualquer desafio que venha a aparecer!",
+    "contact": {
+      "name": "Breno Santos",
+      "url": "https://github.com/breno5g/"
+    },
+    "version": "0.5.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/",
+      "description": "Ng.Cash API"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "summary": "User login",
+        "tags": ["/user"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "email": "example@email.com",
+                    "password": "@Example01"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/definitions/schemas/loginResponseOk"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "data": {
+                        "username": "example",
+                        "account": {
+                          "balance": 100
+                        }
+                      },
+                      "token": "JWT token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Username or Password not found"
+          }
+        }
+      }
+    },
+    "/create": {
+      "post": {
+        "summary": "User create",
+        "tags": ["/user"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Register"
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "username": "example",
+                    "email": "example@email.com",
+                    "password": "@Example01"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "409": {
+            "description": "User already exists"
+          },
+          "201": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Errors related to password or username formatting"
+          }
+        }
+      }
+    },
+    "/balance": {
+      "get": {
+        "summary": "Get user balance",
+        "tags": ["/user"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Balance"
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "username": "teste",
+                    "token": "JWT token"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/definitions/schemas/balanceOk"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "data": {
+                        "balance": 100
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Register": {
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Balance": {
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "schemas": {
+      "loginResponseOk": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              }
+            }
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "balanceOk": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "balance": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
