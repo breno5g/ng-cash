@@ -137,24 +137,48 @@ describe('User service', () => {
     });
 
     describe('Fail case', () => {
-      beforeEach(() => {
-        vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
-          ...userMock[0]
-        } as unknown as IUser));
+      describe('Token with invalid account id', () => {
+        beforeEach(() => {
+          vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
+            ...userMock[0]
+          } as unknown as IUser));
+        });
+    
+        afterAll(() => {
+          vitest.clearAllMocks();
+        });
+    
+        it('should throw error when passed invalid token ', async () => {
+          try {
+            const service = new UserService(new UserModel(new PrismaClient()));
+            await service.getBalance('teste', tokenWithAccountId2Mock );
+          } catch (error: any) {
+            expect(error.message).toBe("Unauthorized")
+            expect(error.status).toBe(401)
+          }
+        });
       });
-  
-      afterAll(() => {
-        vitest.clearAllMocks();
-      });
-  
-      it('should throw error when passed invalid token ', async () => {
-        try {
-          const service = new UserService(new UserModel(new PrismaClient()));
-          await service.getBalance('teste', tokenWithAccountId2Mock );
-        } catch (error: any) {
-          expect(error.message).toBe("Unauthorized")
-          expect(error.status).toBe(401)
-        }
+
+      describe('Invalid token', () => {
+        beforeEach(() => {
+          vitest.spyOn(UserModel.prototype, 'findOneByUsername').mockImplementation(async () => ({
+            ...userMock[0]
+          } as unknown as IUser));
+        });
+    
+        afterAll(() => {
+          vitest.clearAllMocks();
+        });
+    
+        it('should throw error when passed invalid token ', async () => {
+          try {
+            const service = new UserService(new UserModel(new PrismaClient()));
+            await service.getBalance('teste', "dlakdlçask" );
+          } catch (error: any) {
+            expect(error.message).toBe("Unauthorized")
+            expect(error.status).toBe(401)
+          }
+        });
       });
     });
   });
