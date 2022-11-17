@@ -1,9 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { describe, it, expect, beforeEach, vitest, afterAll } from 'vitest';
-import { UserAlreadyExistsError } from '../../errors';
 import UserModel from '../../models/User.model';
 
-import { IUser, IUserLogin } from '../../interfaces/IUser';
+import { IUser } from '../../interfaces/IUser';
 import { UserService } from '../../services/User.service';
 
 import { tokenMock, tokenWithAccountId2Mock, userMock } from "../mocks/user"
