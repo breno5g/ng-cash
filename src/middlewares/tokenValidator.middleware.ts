@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { UnauthoridError } from '../errors';
+import { UnauthorizedError } from '../errors';
 import JWT from '../helpers/jwt.class';
 import { IUserWithToken } from '../interfaces/IUser';
 
@@ -12,7 +12,7 @@ const tokenValidator = (
   const isValid = new JWT().validateToken(token);
 
   if (!isValid) {
-    throw new UnauthoridError();
+    throw new UnauthorizedError();
   }
 
   next();

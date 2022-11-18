@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { IJwt, IToken } from '../interfaces/IJwt';
 import 'dotenv/config';
-import { UnauthoridError } from '../errors';
+import { UnauthorizedError } from '../errors';
 
 class JWT {
   jwtConfig: any;
@@ -27,7 +27,7 @@ class JWT {
 
       return result as IToken;
     } catch (error) {
-      throw new UnauthoridError();
+      throw new UnauthorizedError();
     }
   }
 }

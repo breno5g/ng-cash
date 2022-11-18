@@ -1,4 +1,4 @@
-class UnauthoridError extends Error {
+class UnauthorizedError extends Error {
   public status: number;
   constructor () {
     super('Unauthorized');
@@ -6,4 +6,4 @@ class UnauthoridError extends Error {
   }
 }
 
-export { UnauthoridError };
+export { UnauthorizedError };
