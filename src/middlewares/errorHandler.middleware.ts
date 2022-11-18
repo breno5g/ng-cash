@@ -6,7 +6,8 @@ const ErrorHandler = async (
   _req: Request,
   res: Response,
   _next: NextFunction): Promise<any> => {
-  // console.log(`Status: ${err.status}, Message: ${err.message}, stack: ${err.stack}`);
+  // console.log(`Status: ${err.status}, Message: ${err.message}`);
+  console.log(`Status: ${err.status}, Message: ${err.message}, stack: ${err.stack}`);
 
   if (err.status) {
     return res.status(err.status).json({ message: err.message });
