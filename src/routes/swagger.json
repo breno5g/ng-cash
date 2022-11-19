@@ -16,11 +16,11 @@
     }
   ],
   "paths": {
-    "/": {
+    "/user": {
       "post": {
         "summary": "User login",
         "tags": [
-          "/user"
+          "user"
         ],
         "requestBody": {
           "content": {
@@ -70,11 +70,11 @@
         }
       }
     },
-    "/create": {
+    "/user/create": {
       "post": {
         "summary": "User create",
         "tags": [
-          "/user"
+          "user"
         ],
         "requestBody": {
           "content": {
@@ -106,11 +106,11 @@
         }
       }
     },
-    "/balance": {
+    "/user/balance": {
       "get": {
         "summary": "Get user balance",
         "tags": [
-          "/user"
+          "user"
         ],
         "parameters": [
           {
@@ -118,6 +118,7 @@
             "in": "header",
             "type": "string",
             "description": "auth token",
+            "required": true,
             "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           }
         ],
@@ -163,6 +164,84 @@
           }
         }
       }
+    },
+    "/transaction": {
+      "post": {
+        "summary": "Create new transaction",
+        "tags": [
+          "Transaction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewTransaction"
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "accountToDebit": "teste",
+                    "transactionValue": 50
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Transaction created with success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get transactions",
+        "tags": [
+          "Transaction"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "auth token",
+            "required": true,
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "type": "string",
+            "description": "get transactions by date",
+            "value": "2022-11-19"
+          },
+          {
+            "name": "cash-in",
+            "in": "query",
+            "type": "boolean",
+            "description": "get cash-in transactions",
+            "value": "true"
+          },
+          {
+            "name": "cash-out",
+            "in": "query",
+            "type": "boolean",
+            "description": "get cash-out transactions",
+            "value": "true"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transaction created with success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -191,6 +270,16 @@
         "properties": {
           "username": {
             "type": "string"
+          }
+        }
+      },
+      "NewTransaction": {
+        "properties": {
+          "accountToDebit": {
+            "type": "string"
+          },
+          "transactionValue": {
+            "type": "number"
           }
         }
       }
