@@ -1,8 +1,9 @@
-import { ITransactionData } from './ITransaction';
+import { ITransaction, ITransactionData } from './ITransaction';
+import { ITransactionFilter } from './ITransactionFilter';
 
 interface ITransactionModel {
   create(obj: ITransactionData): Promise<string | null>
-  // getTransactions(username: string): Promise<ITransaction[]>
+  getTransactions(userId: number, filters: ITransactionFilter): Promise<ITransaction[]>
 }
 
 export default ITransactionModel;

@@ -1,8 +1,16 @@
 interface ITransaction {
-  creditedAccount: string
-  debitedAccount: string
+  creditedAccount: {
+    User: {
+      username: string
+    }
+  }
+  debitedAccount: {
+    User: {
+      username: string
+    }
+  }
   value: number
-  date: Date
+  createdAt: Date
 }
 
 interface ITransactionData {

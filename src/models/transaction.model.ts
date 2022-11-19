@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { UnauthorizedError, InsufficientBalance } from '../errors';
 import { ITransaction, ITransactionData } from '../interfaces/ITransaction';
+import { ITransactionFilter } from '../interfaces/ITransactionFilter';
 import ITransactionModel from '../interfaces/ITransactionModel';
 
 class TransactionModel implements ITransactionModel {
@@ -63,9 +64,17 @@ class TransactionModel implements ITransactionModel {
     return 'Transaction created with success';
   }
 
-  public async getTransactions (userId: number): Promise<ITransaction[]> {
+  public async getTransactions (userId: number, filters: ITransactionFilter): Promise<ITransaction[]> {
+    const gte = new Date(filters.date ?? '2000-01-01');
+    const lte = new Date(filters.date ?? Date.now());
+
+    if (filters.date) lte.setDate(gte.getDate() + 1);
+
     const res = await this.prisma.transaction.findMany({
       where: {
+        createdAt: { gte, lte },
+        creditedAccountId: filters['cash-in'] ? userId : undefined,
+        debitedAccountId: filters['cash-out'] ? userId : undefined,
         OR: [
           {
             creditedAccountId: userId
