@@ -1,7 +1,11 @@
+import { PrismaClient } from '@prisma/client';
 import { UnauthorizedError } from '../errors';
 import JWT from '../helpers/jwt.class';
+import { ITransaction } from '../interfaces/ITransaction';
+import { ITransactionFilter } from '../interfaces/ITransactionFilter';
 import ITransactionModel from '../interfaces/ITransactionModel';
 import ITransactionService from '../interfaces/ITransactionService';
+import { TransactionModel } from '../models/transaction.model';
 
 class TransactionService implements ITransactionService {
   private readonly model: ITransactionModel;
@@ -17,12 +21,19 @@ class TransactionService implements ITransactionService {
     const res = await this.model.create({ accountToDebit, transactionValue, userAccountId: user.data.accountId });
     return res;
   }
+
+  public async getTransactions (token: string, filters: ITransactionFilter): Promise<ITransaction[]> {
+    const { data: { accountId } } = this.jwt.validateToken(token) as any;
+    const res = await this.model.getTransactions(accountId, filters);
+
+    return res;
+  }
 }
 
 // const teste = async (): Promise<void> => {
 //   try {
 //     const service = new TransactionService(new TransactionModel(new PrismaClient()));
-//     const res = await service.create('breno5g', 400, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoidGVzdGUiLCJhY2NvdW50SWQiOjF9LCJpYXQiOjE2Njg3ODAxMjUsImV4cCI6MTY2ODg2NjUyNX0.3RznDK-OzcOJ5XUNIT7AaGkI5svpPhPC0ay2Drv-Ric');
+//     const res = await service.getTransactions('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoiYnJlbm81ZyIsImFjY291bnRJZCI6MX0sImlhdCI6MTY2ODg5NDczNywiZXhwIjoxNjY4OTgxMTM3fQ.sytStrlTPVPno6a5Ohs8GG3moXnkfUInDoQdXVPb3jw', { date: '2022-11-19', 'cash-out': true });
 //     console.log(res);
 //   } catch (error: any) {
 //     console.log(error.message);

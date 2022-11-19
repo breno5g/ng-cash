@@ -11,17 +11,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
+  id        Int     @id @default(autoincrement())
+  username  String  @unique
   password  String
-  accountId Int
+  accountId Int     @unique
   account   Account @relation(fields: [accountId], references: [id])
 }
 
 model Account {
   id              Int           @id @default(autoincrement())
   balance         Float
-  User            User[]
+  User            User?
   debitedAccount  Transaction[] @relation(name: "debitedAccount")
   creditedAccount Transaction[] @relation(name: "creditedAccount")
 }
@@ -32,6 +32,6 @@ model Transaction {
   creditedAccountId Int
   value             Float
   createdAt         DateTime
-  debitedAccount    Account @relation(name: "debitedAccount", fields: [debitedAccountId], references: [id])
-  creditedAccount   Account @relation(name: "creditedAccount", fields: [creditedAccountId], references: [id])
+  debitedAccount    Account  @relation(name: "debitedAccount", fields: [debitedAccountId], references: [id])
+  creditedAccount   Account  @relation(name: "creditedAccount", fields: [creditedAccountId], references: [id])
 }

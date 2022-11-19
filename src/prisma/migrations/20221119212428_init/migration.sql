@@ -30,6 +30,9 @@ CREATE TABLE "Transaction" (
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "User_accountId_key" ON "User"("accountId");
+
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

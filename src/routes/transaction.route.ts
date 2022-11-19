@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { TransactionController } from '../controllers/TransactionController';
+import { TransactionController } from '../controllers/Transaction.controller';
 
 import RouteFactorie from '../helpers/route.factorie';
 import tokenValidator from '../middlewares/tokenValidator.middleware';
