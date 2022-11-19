@@ -19,7 +19,9 @@
     "/": {
       "post": {
         "summary": "User login",
-        "tags": ["/user"],
+        "tags": [
+          "/user"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -71,7 +73,9 @@
     "/create": {
       "post": {
         "summary": "User create",
-        "tags": ["/user"],
+        "tags": [
+          "/user"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -82,7 +86,6 @@
                 "example": {
                   "value": {
                     "username": "example",
-                    "email": "example@email.com",
                     "password": "@Example01"
                   }
                 }
@@ -106,7 +109,18 @@
     "/balance": {
       "get": {
         "summary": "Get user balance",
-        "tags": ["/user"],
+        "tags": [
+          "/user"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "auth token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -116,8 +130,7 @@
               "examples": {
                 "example": {
                   "value": {
-                    "username": "teste",
-                    "token": "JWT token"
+                    "username": "teste"
                   }
                 }
               }
@@ -177,9 +190,6 @@
       "Balance": {
         "properties": {
           "username": {
-            "type": "string"
-          },
-          "token": {
             "type": "string"
           }
         }
