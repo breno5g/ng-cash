@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { UnauthorizedError, InsufficientBalance } from '../errors';
-import { ITransactionData } from '../interfaces/ITransaction';
+import { ITransaction, ITransactionData } from '../interfaces/ITransaction';
 import ITransactionModel from '../interfaces/ITransactionModel';
 
 class TransactionModel implements ITransactionModel {
@@ -62,13 +62,52 @@ class TransactionModel implements ITransactionModel {
 
     return 'Transaction created with success';
   }
+
+  public async getTransactions (userId: number): Promise<ITransaction[]> {
+    const res = await this.prisma.transaction.findMany({
+      where: {
+        OR: [
+          {
+            creditedAccountId: userId
+          },
+          {
+            debitedAccountId: userId
+          }
+        ]
+      },
+      select: {
+        value: true,
+        createdAt: true,
+        creditedAccount: {
+          select: {
+            User: {
+              select: {
+                username: true
+              }
+            }
+          }
+        },
+        debitedAccount: {
+          select: {
+            User: {
+              select: {
+                username: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    return res as unknown as ITransaction[];
+  }
 }
 
 // const teste = async (): Promise<void> => {
 //   try {
 //     const model = new TransactionModel(new PrismaClient());
-//     const res = await model.create({ accountToDebit: 'teste', transactionValue: 300, userAccountId: 1 });
-//     console.log(res);
+//     const res = await model.getTransactions(2);
+//     console.table(res);
 //   } catch (error: any) {
 //     console.log(error.message);
 //   }
