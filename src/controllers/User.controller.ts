@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { IUser, IUserWithToken } from '../interfaces/IUser';
+import { IUser } from '../interfaces/IUser';
 import IUserService from '../interfaces/IUserService';
 
 class UserController {
@@ -30,8 +30,9 @@ class UserController {
 
   public async getBalance (req: Request, res: Response, next: NextFunction): Promise<any | null> {
     try {
-      const { username, token } = req.body as IUserWithToken;
-      const response = await this.service.getBalance(username, token);
+      const { authorization: token } = req.headers;
+      const { username } = req.body;
+      const response = await this.service.getBalance(username, token as string);
       return res.status(200).json({ data: response });
     } catch (error: any) {
       next(error);

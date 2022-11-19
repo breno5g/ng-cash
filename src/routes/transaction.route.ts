@@ -14,4 +14,9 @@ route.post('/',
   (req, res, next) => controller.create(req, res, next)
 );
 
+route.get('/',
+  (req, res, next) => tokenValidator(req, res, next),
+  (req, res, next) => controller.getTransactions(req, res, next)
+);
+
 export default route;

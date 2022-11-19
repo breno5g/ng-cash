@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { UnauthorizedError } from '../errors';
 import JWT from '../helpers/jwt.class';
-import { IUserWithToken } from '../interfaces/IUser';
 
 const tokenValidator = (
   req: Request,
   _res: Response,
   next: NextFunction): any => {
-  const { token } = req.body as IUserWithToken;
+  const { authorization } = req.headers;
 
-  const isValid = new JWT().validateToken(token);
+  const isValid = new JWT().validateToken(authorization as string);
 
   if (!isValid) {
     throw new UnauthorizedError();
