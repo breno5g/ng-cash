@@ -1,9 +1,6 @@
-class InsufficientBalance extends Error {
-  public status: number;
-  constructor () {
-    super('Insufficient balance');
-    this.status = 406;
-  }
+class InsufficientBalance {
+  public status: number = 406;
+  public message: string = 'Insufficient balance';
 }
 
 export { InsufficientBalance };

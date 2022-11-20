@@ -1,9 +1,6 @@
-class UsernameOrPasswordNotFoundError extends Error {
-  public readonly status: number;
-  constructor () {
-    super('Username or Password not found');
-    this.status = 400;
-  }
+class UsernameOrPasswordNotFoundError {
+  public readonly status: number = 400;
+  public message: string = 'Username or Password not found';
 }
 
 export {

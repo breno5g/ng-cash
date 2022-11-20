@@ -1,8 +1,6 @@
-class UserAlreadyExistsError extends Error {
+class UserAlreadyExistsError {
   public status: number = 409;
-  constructor () {
-    super('User already exists');
-  }
+  public message: string = 'User already exists';
 }
 
 export default UserAlreadyExistsError;
