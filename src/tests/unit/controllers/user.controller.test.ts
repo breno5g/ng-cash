@@ -5,7 +5,7 @@ import {mockError,mockNext,mockRequest,mockResponse} from "../mocks/express"
 import {UserService} from "../../../services/User.service"
 import {UserController} from "../../../controllers/User.controller"
 import UserModel from '../../../models/User.model';
-import { UserAlreadyExistsError, UsernameOrPasswordNotFoundError } from '../../../errors';
+import { UnauthorizedError, UserAlreadyExistsError, UsernameOrPasswordNotFoundError } from '../../../errors';
 
 describe('User controller', () => {
   describe('Create', () => {
@@ -121,6 +121,60 @@ describe('User controller', () => {
           expect(next).toHaveBeenCalledWith({
             message: "Username or Password not found",
             status: 400
+          })
+      });
+    });
+  });
+
+  describe('Get balance', () => {
+    describe('Success case', () => {
+      let req = mockRequest();
+      let res = mockResponse();
+      let next = mockNext();
+
+      beforeEach(() => {
+        vitest.spyOn(UserService.prototype, 'getBalance').mockImplementation(async () => ({balance: 100}));
+      });
+  
+      afterAll(() => {
+        vitest.clearAllMocks()
+      });
+  
+      it('User created successfully', async () => {
+        const controller = new UserController(new UserService({} as UserModel))
+        await controller.getBalance(req, res, next);
+        
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({data: {balance: 100}});
+        
+      });
+    });
+
+    describe('Fail case', () => {
+      let req = mockRequest();
+      let res = mockResponse();
+      let next = mockNext();
+      beforeEach(() => {
+        req.body = {
+          username: "breno5g",
+          password: "@Teste01"
+        }
+        vitest.spyOn(UserService.prototype, 'getBalance').mockImplementation(async () => {
+          throw new UnauthorizedError()
+        });
+      });
+  
+      afterAll(() => {
+        vitest.clearAllMocks()
+      });
+  
+      it('Unauthorized', async () => {
+          const controller = new UserController(new UserService({} as any))
+          await controller.getBalance(req, res, next);
+          
+          expect(next).toHaveBeenCalledWith({
+            message: "Unauthorized",
+            status: 401
           })
       });
     });
