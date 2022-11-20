@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { IUser } from '../interfaces/IUser';
+import IUserController from '../interfaces/IUserController';
 import IUserService from '../interfaces/IUserService';
 
-class UserController {
+class UserController implements IUserController {
   private readonly service: IUserService;
+  static create: any;
   constructor (service: IUserService) {
     this.service = service;
   }

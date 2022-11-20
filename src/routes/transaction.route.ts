@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import { TransactionController } from '../controllers/Transaction.controller';
 
@@ -7,7 +8,7 @@ import { TransactionModel } from '../models/transaction.model';
 import { TransactionService } from '../services/Transaction.service';
 
 const route = Router();
-const controller = new RouteFactorie(TransactionModel, TransactionService, TransactionController).Controller;
+const controller = new RouteFactorie(TransactionModel, TransactionService, TransactionController, new PrismaClient()).Controller;
 
 route.post('/',
   (req, res, next) => tokenValidator(req, res, next),

@@ -1,11 +1,9 @@
-import { PrismaClient } from '@prisma/client';
 import { UnauthorizedError } from '../errors';
 import JWT from '../helpers/jwt.class';
 import { ITransaction } from '../interfaces/ITransaction';
 import { ITransactionFilter } from '../interfaces/ITransactionFilter';
 import ITransactionModel from '../interfaces/ITransactionModel';
 import ITransactionService from '../interfaces/ITransactionService';
-import { TransactionModel } from '../models/transaction.model';
 
 class TransactionService implements ITransactionService {
   private readonly model: ITransactionModel;

@@ -7,9 +7,10 @@ import { UserController } from '../controllers/User.controller';
 import bodyValidator from '../middlewares/validateBody.middleware';
 import { userBodySchema } from '../schemas/user';
 import tokenValidator from '../middlewares/tokenValidator.middleware';
+import { PrismaClient } from '@prisma/client';
 
 const route = Router();
-const controller = new RouteFactorie(UserModel, UserService, UserController).Controller;
+const controller = new RouteFactorie(UserModel, UserService, UserController, new PrismaClient()).Controller;
 
 route.post('/',
   (req, res, next) => bodyValidator(userBodySchema, req, res, next),
